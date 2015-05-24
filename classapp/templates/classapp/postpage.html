@@ -1,0 +1,13 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+<a class="edit" href="{% url 'post_edit' post.pk post.theclass.id%}">Edit</a>
+<div>
+<p>{{post.title}}</p>
+
+<p>{{post.text}}</p>
+
+</div>
+
+<p><a href="{% url 'classpage' post.theclass.id %}">Back</a></p>
+
+{% endblock content %}

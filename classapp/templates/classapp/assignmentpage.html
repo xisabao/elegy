@@ -1,0 +1,11 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+<a class="edit" href="{% url 'assignment_edit' assignment.pk assignment.theclass.id%}">Edit</a>
+<div>
+<p>{{assignment.title}}</p>
+
+<p>{{assignment.description}}</p>
+
+</div>
+<p><a href="{% url 'classpage' assignment.theclass.id %}">Back</a></p>
+{% endblock content %}

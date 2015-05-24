@@ -1,0 +1,9 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+{% for aclass in classes %}
+	<div>
+		<h2><a href="{% url 'classpage' aclass.id %}">{{aclass.classname}}</a></h2>
+	</div>
+
+{% endfor %}
+{% endblock content %}

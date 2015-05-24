@@ -1,0 +1,25 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+<h2>Posts</h2>
+<p><a href="{% url 'post_new' theclass %}">New Post</a></p>
+{% for post in posts %}
+<div>
+	<ul>
+	<li><a href="{% url 'postpage' theclass post.id %}">{{post}}</a></li>
+	</ul>
+</div>
+{% endfor %}
+<br>
+<h2>Assignments</h2>
+<p><a href="{% url 'assignment_new' theclass %}">New Assignment</a></p>
+{% for assignment in assignments %}
+
+<div
+	<ul>
+	<li><a href="{% url 'assignmentpage' theclass assignment.id %}">{{assignment}}</a></li>
+</ul>
+</div>
+{% endfor %}
+<br>
+<a href="{% url 'class_list' %}">Back</a>
+{% endblock content %}
