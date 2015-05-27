@@ -10,12 +10,12 @@ from .forms import PostForm, AssignmentForm, UserForm, StudentForm, TeacherForm,
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 
-def student_in_class(user, theclassS, studentmodel):
+def student_in_class(user, theclasspk, studentmodel, classmodel):
 	if user:
 		primary_key = user.pk
-		student = studentmodel.objects.filter(user = primary_key)
+		student = studentmodel.objects.get(user = primary_key)
 		if student:
-			if theclassS in student.theclass.all():
+			if classmodel.objects.get(pk = theclasspk) in student.theclass.all():
 				return True
 			else:
 				return False
@@ -24,12 +24,12 @@ def student_in_class(user, theclassS, studentmodel):
 	else:
 		return False
 
-def teacher_in_class(user, theclass, teachermodel):
+def teacher_in_class(user, theclasspk, teachermodel, classmodel):
 	if user:
 		primary_key = user.pk
-		teacher = teachermodel.objects.filter(user = primary_key)
+		teacher = teachermodel.objects.get(user = primary_key)
 		if teacher:
-			if theclass in teacher.theclass.all():
+			if classmodel.objects.get(pk = theclasspk) in teacher.theclass.all():
 				return True
 			else:
 				return False
@@ -56,19 +56,37 @@ def class_list(request):
 
 @login_required
 def classpage(request, theclass):
-		posts = Post.objects.filter(theclass = theclass)
-		assignments = Assignment.objects.filter(theclass = theclass)
-		return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
+		try: 
+			if student_in_class(request.user, theclass, Student, TheClass):
+				posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
+				assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+				return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
+		except:
+		 	if teacher_in_class(request.user, theclass, Teacher, TheClass):
+		 		posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
+				assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+				return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
+		return redirect('classapp.views.class_list')
+
+@login_required
+def post_list(request, theclass):
+	posts = Post.objects.filter(theclass = theclass)
+	return render(request, 'classapp/post_list.html', {'posts': posts, 'theclass': theclass})
 
 @login_required
 def postpage(request, pk, theclass):
 	post = Post.objects.get(id = pk, theclass = theclass)
-	return render(request, 'classapp/postpage.html', {'post': post})
+	return render(request, 'classapp/postpage.html', {'post': post, 'theclass': theclass})
+
+@login_required
+def assignment_list(request, theclass):
+	assignments = Assignment.objects.filter(theclass = theclass)
+	return render(request, 'classapp/assignment_list.html', {'assignments': assignments, 'theclass': theclass})
 
 @login_required
 def assignmentpage(request, pk, theclass):
 	assignment = Assignment.objects.get(id=pk, theclass = theclass)
-	return render(request, 'classapp/assignmentpage.html', {'assignment': assignment})
+	return render(request, 'classapp/assignmentpage.html', {'assignment': assignment, 'theclass': theclass})
 
 @login_required
 def post_new(request, theclass):
@@ -109,7 +127,7 @@ def post_edit(request, pk, theclass):
 			return redirect('classapp.views.postpage', pk = post.pk, theclass=theclass)
 	else:
 		form = PostForm(instance=post)
-	return render(request, 'classapp/post_edit.html', {'form': form})
+	return render(request, 'classapp/post_edit.html', {'form': form, 'theclass': theclass, 'pk': pk})
 @login_required
 def assignment_edit(request, pk, theclass):
 	assignment = Assignment.objects.get(pk=pk, theclass = theclass)
@@ -121,7 +139,7 @@ def assignment_edit(request, pk, theclass):
 			return redirect('classapp.views.assignmentpage', pk=assignment.pk, theclass = theclass)
 	else:
 		form = AssignmentForm(instance=assignment)
-	return render(request, 'classapp/assignment_edit.html', {'form': form})
+	return render(request, 'classapp/assignment_edit.html', {'form': form, 'theclass': theclass, 'pk': pk})
 
 @login_required
 def discussion_list(request, theclass):
@@ -145,7 +163,7 @@ def discussion_new(request, theclass):
 			return redirect('classapp.views.discussionpage', pk=discussion.pk, theclass=theclass)
 	else:
 		form = DiscussionForm()
-	return render(request, 'classapp/discussion_edit.html', {'form': form})
+	return render(request, 'classapp/discussion_edit.html', {'form': form, 'theclass': theclass})
 
 @login_required
 def discussionpost_new(request, theclass, pk):
@@ -158,8 +176,8 @@ def discussionpost_new(request, theclass, pk):
 			discussionpost.save()
 			return redirect('classapp.views.discussionpage', pk=pk, theclass=theclass)
 	else:
-		form = DiscussionForm()
-	return render(request, 'classapp/discussionpost_edit.html', {'form': form})
+		form = DiscussionPostForm()
+	return render(request, 'classapp/discussionpost_edit.html', {'form': form, 'theclass': theclass, 'pk': pk})
 
 
 ################################## Auth stuff ##########################################

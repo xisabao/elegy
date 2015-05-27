@@ -1,7 +1,10 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
 <h2>Posts</h2>
+{% if perms.classapp.add_post %}
 <p><a href="{% url 'post_new' theclass %}">New Post</a></p>
+{% endif %}
+<a href="{% url 'post_list' theclass %}">All Posts</a>
 {% for post in posts %}
 <div>
 	<ul>
@@ -11,7 +14,10 @@
 {% endfor %}
 <br>
 <h2>Assignments</h2>
+{% if perms.classapp.add_assignment %}
 <p><a href="{% url 'assignment_new' theclass %}">New Assignment</a></p>
+{% endif %}
+<a href="{% url 'assignment_list' theclass %}">All Assignments</a>
 {% for assignment in assignments %}
 
 <div>

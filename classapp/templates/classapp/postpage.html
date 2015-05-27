@@ -1,6 +1,10 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+{% if perms.classapp.change_post %}
+
 <a class="edit" href="{% url 'post_edit' post.pk post.theclass.id%}">Edit</a>
+
+{% endif %}
 <div>
 <p>{{post.title}}</p>
 
@@ -8,6 +12,6 @@
 
 </div>
 
-<p><a href="{% url 'classpage' post.theclass.id %}">Back</a></p>
+<p><a href="{% url 'post_list' theclass %}">Back</a></p>
 
 {% endblock content %}

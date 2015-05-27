@@ -1,0 +1,12 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+{% for post in posts %}
+	<div>
+		<h2><a href="{% url 'postpage' post.pk theclass %}">{{post}}</a></h2>
+	</div>
+
+{% endfor %}
+
+<a href="{% url 'classpage' theclass %}">Back</a>
+
+{% endblock content %}
