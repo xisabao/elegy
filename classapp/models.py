@@ -7,7 +7,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-# create a fucking relational database you dumbass what do you think relational databases are for
 class TheClass(models.Model):
 
 	classname = models.CharField(max_length=200)
@@ -62,6 +61,26 @@ class Assignment(models.Model):
 	description = models.TextField()
 	created_date = models.DateTimeField(default = timezone.now)
 	due_date = models.DateTimeField(blank=True, null=True)
+
+	def __str__(self):
+		return self.title
+
+class Discussion(models.Model):
+	title = models.CharField(max_length=200)
+	creator = models.ForeignKey('auth.User')
+	description = models.TextField()
+	theclass = models.ForeignKey(TheClass)
+	created_date = models.DateTimeField(default = timezone.now)
+
+	def __str__(self):
+		return self.title
+
+class DiscussionPosts(models.Model):
+	title = models.CharField(max_length = 200)
+	author = models.ForeignKey('auth.User')
+	text = models.TextField()
+	published_date = models.DateTimeField(default = timezone.now)
+	discussion = models.ForeignKey(Discussion)
 
 	def __str__(self):
 		return self.title

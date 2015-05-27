@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TheClass, Post, Assignment, Student, Teacher, StudentToClass, TeacherToClass
+from .models import TheClass, Post, Assignment, Student, Teacher, StudentToClass, TeacherToClass, Discussion, DiscussionPosts
 
 class StudentToClassInline(admin.TabularInline):
 	model = StudentToClass
@@ -24,3 +24,5 @@ admin.site.register(Assignment)
 admin.site.register(Post)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Discussion)
+admin.site.register(DiscussionPosts)

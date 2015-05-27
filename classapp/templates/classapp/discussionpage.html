@@ -1,0 +1,13 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+{% for post in posts %}
+	<div>
+		<h2>{{post}}</a></h2>
+		<p>{{post.text}}</p>
+	</div>
+
+{% endfor %}
+<a href="{% url 'discussionpost_new' theclass pk %}">New Post</a>
+<br>
+<a href="{% url 'discussion_list' theclass %}">Back</a>
+{% endblock content %}

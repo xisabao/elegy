@@ -1,0 +1,12 @@
+{% extends 'classapp/base.html' %}
+{% block content %}
+{% for discussion in discussions %}
+	<div>
+		<h2><a href="{% url 'discussionpage' theclass discussion.pk %}">{{discussion}}</a></h2>
+	</div>
+
+{% endfor %}
+<a href="{% url 'discussion_new' theclass %}">New Discussion</a>
+<br>
+<a href="{% url 'classpage' theclass %}">Back</a>
+{% endblock content %}

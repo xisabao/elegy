@@ -14,12 +14,15 @@
 <p><a href="{% url 'assignment_new' theclass %}">New Assignment</a></p>
 {% for assignment in assignments %}
 
-<div
+<div>
 	<ul>
 	<li><a href="{% url 'assignmentpage' theclass assignment.id %}">{{assignment}}</a></li>
 </ul>
 </div>
 {% endfor %}
 <br>
+
+<a href="{% url 'discussion_list' theclass%}"><h2>Discussions</h2></a>
+
 <a href="{% url 'class_list' %}">Back</a>
 {% endblock content %}

@@ -1,29 +1,76 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.shortcuts import render, redirect, render_to_response
 from django.utils import timezone
-from .models import TheClass, Post, Assignment
-from .forms import PostForm, AssignmentForm
+from .models import TheClass, Post, Assignment, Teacher, Student, Discussion, DiscussionPosts
+from .forms import PostForm, AssignmentForm, UserForm, StudentForm, TeacherForm, DiscussionForm, DiscussionPostForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 
-# Create your views here.
+def student_in_class(user, theclassS, studentmodel):
+	if user:
+		primary_key = user.pk
+		student = studentmodel.objects.filter(user = primary_key)
+		if student:
+			if theclassS in student.theclass.all():
+				return True
+			else:
+				return False
+		else:
+			return False
+	else:
+		return False
+
+def teacher_in_class(user, theclass, teachermodel):
+	if user:
+		primary_key = user.pk
+		teacher = teachermodel.objects.filter(user = primary_key)
+		if teacher:
+			if theclass in teacher.theclass.all():
+				return True
+			else:
+				return False
+		else:
+			return False
+	else:
+		return False
+
+################################################# VIEWS ##################################
+def index(request):
+	return render(request, 'classapp/index.html', {})
+
+@login_required
 def class_list(request):
-	classes = TheClass.objects.all()
+	primary_key = request.user.pk 
+	
+	try:
+		student = Student.objects.get(user = primary_key)
+		classes = student.theclass.all()
+	except:
+		teacher = Teacher.objects.get(user = primary_key)
+		classes = teacher.theclass.all()
 	return render(request, 'classapp/class_list.html', {'classes': classes})
 
+@login_required
 def classpage(request, theclass):
-	posts = Post.objects.filter(theclass = theclass)
-	assignments = Assignment.objects.filter(theclass = theclass)
-	return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
+		posts = Post.objects.filter(theclass = theclass)
+		assignments = Assignment.objects.filter(theclass = theclass)
+		return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
 
+@login_required
 def postpage(request, pk, theclass):
 	post = Post.objects.get(id = pk, theclass = theclass)
 	return render(request, 'classapp/postpage.html', {'post': post})
 
+@login_required
 def assignmentpage(request, pk, theclass):
 	assignment = Assignment.objects.get(id=pk, theclass = theclass)
 	return render(request, 'classapp/assignmentpage.html', {'assignment': assignment})
 
+@login_required
 def post_new(request, theclass):
 	if request.method == "POST":
 		form = PostForm(request.POST)
@@ -37,6 +84,7 @@ def post_new(request, theclass):
 		form = PostForm()
 	return render(request, 'classapp/post_edit.html', {'form': form})
 
+@login_required
 def assignment_new(request, theclass):
 	if request.method == "POST":
 		form = AssignmentForm(request.POST)
@@ -49,6 +97,7 @@ def assignment_new(request, theclass):
 		form = AssignmentForm
 	return render(request, 'classapp/assignment_edit.html', {'form': form})
 
+@login_required
 def post_edit(request, pk, theclass):
 	post = Post.objects.get(pk=pk, theclass=theclass)
 	if request.method == "POST":
@@ -61,7 +110,7 @@ def post_edit(request, pk, theclass):
 	else:
 		form = PostForm(instance=post)
 	return render(request, 'classapp/post_edit.html', {'form': form})
-
+@login_required
 def assignment_edit(request, pk, theclass):
 	assignment = Assignment.objects.get(pk=pk, theclass = theclass)
 	if request.method == "POST":
@@ -73,3 +122,115 @@ def assignment_edit(request, pk, theclass):
 	else:
 		form = AssignmentForm(instance=assignment)
 	return render(request, 'classapp/assignment_edit.html', {'form': form})
+
+@login_required
+def discussion_list(request, theclass):
+	discussions = Discussion.objects.filter(theclass = theclass).order_by('created_date')
+	return render(request, 'classapp/discussion_list.html', {'discussions': discussions, 'theclass': theclass})
+
+@login_required
+def discussionpage(request, theclass, pk):
+	posts = DiscussionPosts.objects.filter(discussion = pk).order_by('published_date')
+	return render(request, 'classapp/discussionpage.html', {'posts': posts, 'theclass': theclass, 'pk': pk})
+
+@login_required
+def discussion_new(request, theclass):
+	if request.method == "POST":
+		form = DiscussionForm(request.POST)
+		if form.is_valid():
+			discussion = form.save(commit=False)
+			discussion.creator = request.user
+			discussion.theclass = TheClass.objects.get(id = theclass)
+			discussion.save()
+			return redirect('classapp.views.discussionpage', pk=discussion.pk, theclass=theclass)
+	else:
+		form = DiscussionForm()
+	return render(request, 'classapp/discussion_edit.html', {'form': form})
+
+@login_required
+def discussionpost_new(request, theclass, pk):
+	if request.method == "POST":
+		form = DiscussionPostForm(request.POST)
+		if form.is_valid():
+			discussionpost = form.save(commit=False)
+			discussionpost.author = request.user
+			discussionpost.discussion = Discussion.objects.get(pk = pk)
+			discussionpost.save()
+			return redirect('classapp.views.discussionpage', pk=pk, theclass=theclass)
+	else:
+		form = DiscussionForm()
+	return render(request, 'classapp/discussionpost_edit.html', {'form': form})
+
+
+################################## Auth stuff ##########################################
+
+def register_student(request):
+	context = RequestContext(request)
+	registered = False
+	if request.method == 'POST':
+		user_form = UserForm(data=request.POST)
+		student_form = StudentForm(data = request.POST)
+
+		if user_form.is_valid() and student_form.is_valid():
+			user = user_form.save()
+			user.set_password(user.password)
+
+			user.save()
+
+			student = student_form.save(commit = False)
+			student.user = user
+			student.save()
+			registered = True
+	else:
+		user_form = UserForm()
+		student_form = StudentForm()
+	return render_to_response('classapp/register_student.html', {'user_form': user_form, 'student_form': student_form, 'registered': registered}, context)
+
+def register_teacher(request):
+	context = RequestContext(request)
+	registered = False
+	if request.method == 'POST':
+		user_form = UserForm(data=request.POST)
+		teacher_form = TeacherForm(data = request.POST)
+
+		if user_form.is_valid() and teacher_form.is_valid():
+
+			user = user_form.save()
+
+			user.set_password(user.password)
+
+			user.save()
+
+			teacher = teacher_form.save(commit = False)
+			teacher.user = user
+			teacher.save()
+			registered = True
+	else:
+		user_form = UserForm()
+		teacher_form = TeacherForm()
+	return render_to_response('classapp/register_teacher.html', {'user_form': user_form, 'teacher_form': teacher_form, 'registered': registered}, context)
+
+def user_login(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+
+		user = authenticate(username = username, password = password)
+
+		if user:
+			if user.is_active:
+				login(request, user)
+				return redirect('classapp.views.class_list')
+			else:
+				return HttpResponse("Your account is disabled.")
+		else:
+			print "Invalid login details: {0}, {1}".format(username, password)
+			return HttpResponse("Invalid login details supplied.")
+	else:
+		return render(request, 'classapp/login.html', {})
+
+@login_required
+def user_logout(request):
+	logout(request)
+
+	return redirect('classapp.views.index')
