@@ -80,10 +80,11 @@ WSGI_APPLICATION = 'elegy.wsgi.application'
 
 DATABASES = {
     'default': {
-        dj_database_url.config()
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+DATABASES['default'] = dj_database_url.config()
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -104,9 +105,12 @@ USE_TZ = True
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = {
-    os.path.join(BASE_DIR, 'static'),
-}
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+STATICFILES_DIRS = (
+    "classapp/static",
+)
 
 try:
     from .local_settings import *
