@@ -1,1 +1,1 @@
-web: gunicorn classapp.wsgi
+web: gunicorn elegy.wsgi --log-file -
