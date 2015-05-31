@@ -1,6 +1,6 @@
 local_settings.py
 db.sqlite3
-*.py[co]
+*.pyc
 __pycache__
 myenv
 staticfiles
