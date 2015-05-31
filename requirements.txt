@@ -6,14 +6,8 @@ pathlib==1.0.1
 pbr==0.11.0
 Pillow==2.8.1
 psutil==2.2.1
-pygame===1.9.1release
 requests==2.7.0
 six==1.9.0
 stevedore==1.4.0
-thefuck==1.41
-virtualenv==12.1.1
-virtualenv-clone==0.2.5
-virtualenvwrapper==4.5.1
-web.py==0.37
 whitenoise==1.0.6
 pyscopg2==2.5.4
