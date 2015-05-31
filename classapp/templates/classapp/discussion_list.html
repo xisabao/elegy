@@ -1,12 +1,18 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
-{% for discussion in discussions %}
-	<div>
-		<h2><a href="{% url 'discussionpage' theclass discussion.pk %}">{{discussion}}</a></h2>
-	</div>
-
-{% endfor %}
+<h2>Discussions for {{classname}}</h2>
+<div class="newthing">
+	<i class="glyphicon glyphicon-pencil"></i>
 <a href="{% url 'discussion_new' theclass %}">New Discussion</a>
-<br>
+</div>
+<ul class="nav list-unstyled">
+{% for discussion in discussions %}
+		<li><a href="{% url 'discussionpage' theclass discussion.pk %}">{{discussion}}</a></li>
+{% endfor %}
+</ul>
+
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 <a href="{% url 'classpage' theclass %}">Back</a>
+</div>
 {% endblock content %}

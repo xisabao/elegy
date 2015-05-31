@@ -2,18 +2,78 @@
 <html>
 <head>
 	<title>Elegy</title>
+	<link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/classapp.css' %}">
 </head>
 <body>
-	<div class="page-header">
-		<h1><a href="{% url 'index' %}">Elegy</a></h1>
+	<div class="insert">
+	<div class="modal">
+		<div class="text">
+		<p>Elegy is basically Isabelle trying to make a better Haiku for her Intro to Comp Sci final project but failing miserably. It's a parody, guys.</p>
+		<p>Quick note: The great thing about this website is that administrator access is required to change your settings, so even if you do create an account, an administrator will have to set your permissions and settings. HA! Have fun messing up my project now!</p>
+		<p>Fun fact: Elegy is named 'Elegy' because originally the project was named 'Sonnet' so I could call it Sonnet Project in honor of our Freshman English Sonnet Projects, but I messed up my database migrations and SQL table joins, so I had to start a new project. In my rage and frustration, I Googled for <a href="http://www.poetryfoundation.org/learning/glossary-terms?category=forms-and-types" target="_blank">forms of poems.</a> I scrolled down and the first thing I saw was Elegy, which is a poem lamenting its subject's death. Perfect for a site lamenting the death of Haiku, right? (Also perfect for me, lamenting the death of my database :/)</p>
+		<p>Speaking of failures, one day, while working on this project, I managed to spend an entire morning debugging a weird error with my password hashing. Four hours later, a kind stranger informed me that it was because I forgot one pair of parentheses. Thanks, Ruby.</p>
+		<p>Looks pretty awesome right? Well, you too can do this and be as awesome as me! I used the following tools (and many hours procrastinating, do not recommend) to make this website:</p>
+		<ul>
+			<li><a href="https://www.djangoproject.com/" target="_blank">Django</a>, a full-stack web application framework</li>
+			<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>, a front-end CSS and JS framework</li>
+			<li><a href="https://www.heroku.com/" target="_blank">Heroku</a>, for easy deployment</li>
+			<li><a href="http://theonion.github.io/fartscroll.js/" target="_blank">Fartscroll.js</a>, the greatest Javascript library ever created</li>
+		</ul>
+		<p>As well as knowledge of:</p>
+		<ul>
+			<li>Python, of course. Thank you to Andrew for an awesome year of Comp Sci!</li>
+			<li>Javascript and JQuery, just to make this awesome modal and drive in the fact that I know Javascript too.</li>
+			<li>HTML and CSS, of course...</li>
+			<li>Just enough SQL to get by...</li>
+			<li>Some miscellaneous stuff like Git and Regex</li>
+			<li>How to Google every bug you come across</li>
+			<li>How to skim through ridiculous amounts of documentation</li>
+			<li>How not to mess up your database migrations</li>
+			<li>How to post dumb questions on Stack Overflow</li>
+		</ul>
+		<p>It did take me a couple months to learn all of this, though.</p>
+		<p>And since the cool thing about having your own website is that you can do whatever you want, here's a link to <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">the greatest song ever.</a></p>
+		<p>Just kidding, <a href="https://www.youtube.com/watch?v=ST86JM1RPl0" target="_blank">this</a> is the best song ever. And <a href="https://www.youtube.com/watch?v=CAA_zE5a3JQ" target="_blank">this</a> is the best version of it.</p>
+		<p>The corgis are from <a href="https://www.reddit.com/r/corgi" target="_blank">here</a>.</p>
 	</div>
-	<div class = "content container">
-	{% if user.is_authenticated %}
-	<a href="{% url 'logout' %}">Logout</a>
+	</div>
+	</div>
+	<div class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+		<a href="{% url 'index' %}" class="navbar-brand">Elegy</a>
+				<ul class='nav navbar-right navbar-nav'>
+		<li><a id="about">About</a></li>
+		{% if not user.is_authenticated %}
+
+<li><a href="{% url 'register_student' %}" class="register">Register a student</a></li>
+<li><a href="{% url 'register_teacher' %}" class="register">Register a teacher</a></li>
+<li><a href="{% url 'login' %}" class="login">Login</a></li>
+{% endif %}
+			{% if user.is_authenticated %}
+
+		<li><a href="{% url 'class_list' %}">Classes</a></li>
+		<li><a href="{% url 'logout' %}">Logout</a></li>
+		
 	{% endif %}
+	</ul>
+</div>
+	</div>
+	<div class="content container">
+
 	{% block content %}
 	{% endblock %}
 	</div>
-
+	<footer class="footer">
+		<div class="footer_content">
+		<p>Created by <a href="http://www.isabellezheng.com">Isabelle Zheng</a> in 2015 because she's awesome</p>
+	</div>
+	</footer>
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.onion.com/fartscroll.js"></script>
+	<script src="{% static 'js/classapp.js' %}"></script>
+	<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

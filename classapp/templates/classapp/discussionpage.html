@@ -1,13 +1,22 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+<h2>Posts for Discussion: {{discussion}}</h2>
+<p>{{discussion.description}}</p>
 {% for post in posts %}
 	<div>
-		<h2>{{post}}</a></h2>
+		<h3>{{post}}</h3>
+		<h5>{{post.author}}</h5>
 		<p>{{post.text}}</p>
+		<p class="date">{{post.published_date}}</p>
 	</div>
 
 {% endfor %}
+<div class="newthing">
+	<i class="glyphicon glyphicon-pencil"></i>
 <a href="{% url 'discussionpost_new' theclass pk %}">New Post</a>
-<br>
+</div>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 <a href="{% url 'discussion_list' theclass %}">Back</a>
+</div>
 {% endblock content %}

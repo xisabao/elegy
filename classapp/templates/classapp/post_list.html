@@ -1,12 +1,20 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+<h2>Posts for {{classname}}</h2>
+{% if perms.classapp.add_post %}
+<div class="newthing">
+<i class="glyphicon glyphicon-pencil"></i>
+<a href="{% url 'post_new' theclass %}">New Post</a>
+</div>
+{% endif %}
+<ul class="nav list-unstyled">
 {% for post in posts %}
-	<div>
-		<h2><a href="{% url 'postpage' post.pk theclass %}">{{post}}</a></h2>
-	</div>
+		<li><a href="{% url 'postpage' theclass post.pk  %}">{{post}}</a></li>
 
 {% endfor %}
-
+</ul>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 <a href="{% url 'classpage' theclass %}">Back</a>
-
+</div>
 {% endblock content %}

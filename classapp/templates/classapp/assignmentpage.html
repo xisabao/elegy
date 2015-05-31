@@ -1,15 +1,27 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+<h2>{{assignment.title}}</h2>
+
+<p class="date">Do it by: {{assignment.due_date}}</p>
 {% if perms.classapp.change_assignment %}
-<a class="edit" href="{% url 'assignment_edit' assignment.pk assignment.theclass.pk %}">Edit</a>
+<div class="editthing">
+	<i class="glyphicon glyphicon-edit"></i>
+<a class="edit" href="{% url 'assignment_edit' assignment.pk theclass %}">Edit</a>
+</div>
+{% endif %}
+{% if perms.classapp.delete_assignment %}
+<div class="deletething">
+	<i class="glyphicon glyphicon-trash"></i>
+<a class="delete" href="{% url 'assignment_delete' assignment.pk theclass %}">Delete</a>
+</div>
 {% endif %}
 <div>
-<p>{{assignment.title}}</p>
-<p>{{assignment.due_date}}</p>
 
 <p>{{assignment.description}}</p>
 
 </div>
-
-<p><a href="{% url 'assignment_list' theclass %}">Back</a></p>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
+<a href="{% url 'assignment_list' theclass %}">Back</a></p>
+</div>
 {% endblock content %}

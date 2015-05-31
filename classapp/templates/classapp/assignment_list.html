@@ -1,12 +1,20 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+<h2>Assignments for {{classname}}</h2>
+{% if perms.classapp.add_assignment %}
+<div class="newthing">
+<i class="glyphicon glyphicon-pencil"></i>
+	<a href="{% url 'assignment_new' theclass %}">New Assignment</a>
+</div>
+{% endif %}
+<ul class="list-unstyled nav">
 {% for assignment in assignments %}
-	<div>
-		<h2><a href="{% url 'assignmentpage' assignment.pk theclass %}">{{assignment}}</a></h2>
-	</div>
+	<li><a href="{% url 'assignmentpage' theclass assignment.pk %}">{{assignment}}</a></li>
 
 {% endfor %}
-
+</ul>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 <a href="{% url 'classpage' theclass %}">Back</a>
-
+</div>
 {% endblock content %}

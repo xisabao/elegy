@@ -1,34 +1,47 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
-<h2>Posts</h2>
-{% if perms.classapp.add_post %}
-<p><a href="{% url 'post_new' theclass %}">New Post</a></p>
-{% endif %}
-<a href="{% url 'post_list' theclass %}">All Posts</a>
+<div class="jumbotron">
+<h1>{{ theclass}}</h1>
+
+	</div>
+<div class = "row">
+<div class="col-md-4" id="posts">
+	<i class="glyphicon glyphicon-info-sign"></i>
+<a href="{% url 'post_list' theclass.pk %}"><h2>Posts</h2></a>
 {% for post in posts %}
 <div>
-	<ul>
-	<li><a href="{% url 'postpage' theclass post.id %}">{{post}}</a></li>
+	<ul class="list-unstyled">
+	<li><a href="{% url 'postpage' theclass.pk post.id %}">{{post}}</a></li>
 	</ul>
 </div>
 {% endfor %}
-<br>
-<h2>Assignments</h2>
-{% if perms.classapp.add_assignment %}
-<p><a href="{% url 'assignment_new' theclass %}">New Assignment</a></p>
-{% endif %}
-<a href="{% url 'assignment_list' theclass %}">All Assignments</a>
-{% for assignment in assignments %}
+</div>
 
+<div class="col-md-4" id="assignments">
+	<i class="glyphicon glyphicon-list-alt"></i>
+<a href="{% url 'assignment_list' theclass.pk %}"><h2>Assignments</h2></a>
+{% for assignment in assignments %}
 <div>
-	<ul>
-	<li><a href="{% url 'assignmentpage' theclass assignment.id %}">{{assignment}}</a></li>
+	<ul class="list-unstyled">
+	<li><a href="{% url 'assignmentpage' theclass.pk assignment.id %}">{{assignment}}</a></li>
 </ul>
 </div>
 {% endfor %}
-<br>
+</div>
 
-<a href="{% url 'discussion_list' theclass%}"><h2>Discussions</h2></a>
-
+<div class = "col-md-4" id="discussions">
+	<i class="glyphicon glyphicon-comment"></i>
+<a href="{% url 'discussion_list' theclass.pk%}"><h2>Discussions</h2></a>
+{% for discussion in discussions %}
+<div>
+	<ul class="list-unstyled">
+		<li><a href="{% url 'discussionpage' theclass.pk discussion.pk %}">{{discussion}}</a></li>
+	</ul>
+</div>
+{% endfor %}
+</div>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 <a href="{% url 'class_list' %}">Back</a>
+</div>
 {% endblock content %}

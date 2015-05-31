@@ -1,0 +1,96 @@
+/*TODO*/
+#assignments .glyphicon{
+	font-size: 32px;
+}
+#discussions .glyphicon{
+	font-size: 32px;
+}
+#posts .glyphicon{
+	font-size: 32px;
+}
+.deletething{
+	padding: 5px;
+}
+.editthing{
+	padding: 5px;
+}
+.footer{
+	height: 32px; 
+    width: 100%; 
+    background-color: white;
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    position: fixed;
+    bottom: 0pt;
+    left: 0pt;
+}
+.footer_content{
+	font-size: 12px;
+	padding-top: 7px;
+	height: 26px;
+	width: 1000px;
+	margin: auto;
+}
+.back{
+	position: absolute;
+	bottom: 10%;
+	margin-left: 5%;
+}
+.register{
+	color: white;
+	margin-right: 20px;
+}
+.login{
+	color: white;
+}
+.newuser{
+	padding: 10px;
+}
+input{
+	margin: 5px;
+	width: 400px;
+}
+.subbutton{
+	margin-top: 10px;
+	margin-left: 150px;
+	width: 200px;
+	padding: 5px 15px;
+    background: #F6F6F6;
+    text-transform: uppercase;
+    border-radius: 5px;
+    color: black;
+    height: 30px;
+    border:0;
+
+}
+.date{
+	font-style: italic;
+}
+.insert{
+	display: none;
+	position: fixed;
+	top:0;
+	left:0;
+	height:100%;
+	width: 100%;
+	z-index: 9;
+	background-color: rgba(0,0,0,0.5);
+}
+.modal{
+	height: 70%;
+	width: 70%;
+	position: fixed;
+	margin: auto;
+	z-index: 10;
+	 background: white;
+	border-radius: 1%;
+	display: none;
+}
+.modal .text{
+	padding: 50px;
+}
+a{
+	cursor: pointer;
+}

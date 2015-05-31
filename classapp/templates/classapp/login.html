@@ -4,10 +4,10 @@
 	<h1>Login</h1>
 	<form id="login_form" method="post">
 		{% csrf_token %}
-
 		Username: <input type="text" name = "username" value="" size="50"/>
 		<br>
 		Password: <input type="password" name="password" value="" size="50" />
-	<input type="submit" name="submit" />
+		<br>
+	<input type="submit" name="submit" class="subbutton"/>
 </form>
 {% endblock %}

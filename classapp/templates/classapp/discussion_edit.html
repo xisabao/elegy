@@ -5,9 +5,11 @@
 	<form method="POST" class="post-form">
 		{% csrf_token %}
 		{{form.as_p}}
-		<button type="submit" class="save btn">Save</button>
+		<button type="submit" class="subbutton">Save</button>
 	</form>
-
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
 	<a href="{% url 'discussion_list' theclass %}">Back</a>
+</div>
 
 {% endblock %}

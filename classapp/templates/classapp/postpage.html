@@ -1,17 +1,27 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
+<h2>{{post.title}}</h2>
+<h5>By {{post.author}}</h5>
+<h5>{{post.created_date}}</h5>
 {% if perms.classapp.change_post %}
-
+<div class="editthing">
+	<i class="glyphicon glyphicon-edit"></i>
 <a class="edit" href="{% url 'post_edit' post.pk post.theclass.id%}">Edit</a>
-
+</div>
+{% endif %}
+{% if perms.classapp.delete_post %}
+<div class="deletething">
+	<i class="glyphicon glyphicon-trash"></i>
+<a class="delete" href="{% url 'post_delete' post.pk theclass %}">Delete</a>
+</div>
 {% endif %}
 <div>
-<p>{{post.title}}</p>
-
 <p>{{post.text}}</p>
 
 </div>
-
-<p><a href="{% url 'post_list' theclass %}">Back</a></p>
+<div class="row back">
+	<i class="glyphicon glyphicon-arrow-left"></i>
+<a href="{% url 'post_list' theclass %}">Back</a>
+</div>
 
 {% endblock content %}

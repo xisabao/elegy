@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.models import User
 from .models import Post, Assignment, Student, Teacher, StudentToClass, TeacherToClass, Discussion, DiscussionPosts
 
@@ -9,10 +10,10 @@ class PostForm(forms.ModelForm):
 		fields = ('title', 'text')
 
 class AssignmentForm(forms.ModelForm):
-
+	due_date = forms.DateField(widget = SelectDateWidget)
 	class Meta:
 		model = Assignment
-		fields = ('title', 'description')
+		fields = ('title', 'description', 'due_date')
 
 class DiscussionForm(forms.ModelForm):
 

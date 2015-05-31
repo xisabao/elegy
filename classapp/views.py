@@ -56,22 +56,27 @@ def class_list(request):
 
 @login_required
 def classpage(request, theclass):
-		try: 
-			if student_in_class(request.user, theclass, Student, TheClass):
-				posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
-				assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
-				return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
-		except:
-		 	if teacher_in_class(request.user, theclass, Teacher, TheClass):
-		 		posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
-				assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
-				return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments})
-		return redirect('classapp.views.class_list')
+	try: 
+		if student_in_class(request.user, theclass, Student, TheClass):
+			myclass = TheClass.objects.get(pk = theclass)
+			posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
+			assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
+			return render(request, 'classapp/classpage.html', {'theclass': myclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
+	except:
+	 	if teacher_in_class(request.user, theclass, Teacher, TheClass):
+	 		myclass = TheClass.objects.get(pk=theclass)
+	 		posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
+			assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
+			return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
+	return redirect('classapp.views.class_list')
 
 @login_required
 def post_list(request, theclass):
 	posts = Post.objects.filter(theclass = theclass)
-	return render(request, 'classapp/post_list.html', {'posts': posts, 'theclass': theclass})
+	classname = TheClass.objects.get(pk = theclass)
+	return render(request, 'classapp/post_list.html', {'posts': posts, 'theclass': theclass, 'classname': classname})
 
 @login_required
 def postpage(request, pk, theclass):
@@ -80,8 +85,9 @@ def postpage(request, pk, theclass):
 
 @login_required
 def assignment_list(request, theclass):
+	classname = TheClass.objects.get(pk = theclass)
 	assignments = Assignment.objects.filter(theclass = theclass)
-	return render(request, 'classapp/assignment_list.html', {'assignments': assignments, 'theclass': theclass})
+	return render(request, 'classapp/assignment_list.html', {'assignments': assignments, 'theclass': theclass, 'classname': classname})
 
 @login_required
 def assignmentpage(request, pk, theclass):
@@ -100,7 +106,9 @@ def post_new(request, theclass):
 			return redirect('classapp.views.postpage', pk=post.pk, theclass=theclass)
 	else:
 		form = PostForm()
-	return render(request, 'classapp/post_edit.html', {'form': form})
+	return render(request, 'classapp/post_edit.html', {'form': form, 'theclass': theclass})
+
+
 
 @login_required
 def assignment_new(request, theclass):
@@ -113,7 +121,9 @@ def assignment_new(request, theclass):
 			return redirect('classapp.views.assignmentpage', pk=assignment.pk, theclass=theclass)
 	else:
 		form = AssignmentForm
-	return render(request, 'classapp/assignment_edit.html', {'form': form})
+	return render(request, 'classapp/assignment_edit.html', {'form': form, 'theclass': theclass})
+
+
 
 @login_required
 def post_edit(request, pk, theclass):
@@ -142,14 +152,28 @@ def assignment_edit(request, pk, theclass):
 	return render(request, 'classapp/assignment_edit.html', {'form': form, 'theclass': theclass, 'pk': pk})
 
 @login_required
+def post_delete(request, pk, theclass):
+	post = Post.objects.get(pk=pk, theclass=theclass)
+	post.delete()
+	return redirect('classapp.views.post_list', theclass=theclass)
+
+@login_required
+def assignment_delete(request, pk, theclass):
+	assignment = Assignment.objects.get(pk=pk, theclass=theclass)
+	assignment.delete()
+	return redirect('classapp.views.assignment_list', theclass=theclass)
+
+@login_required
 def discussion_list(request, theclass):
+	classname = TheClass.objects.get(pk = theclass)
 	discussions = Discussion.objects.filter(theclass = theclass).order_by('created_date')
-	return render(request, 'classapp/discussion_list.html', {'discussions': discussions, 'theclass': theclass})
+	return render(request, 'classapp/discussion_list.html', {'discussions': discussions, 'theclass': theclass, 'classname': classname})
 
 @login_required
 def discussionpage(request, theclass, pk):
+	discussion = Discussion.objects.get(pk = pk)
 	posts = DiscussionPosts.objects.filter(discussion = pk).order_by('published_date')
-	return render(request, 'classapp/discussionpage.html', {'posts': posts, 'theclass': theclass, 'pk': pk})
+	return render(request, 'classapp/discussionpage.html', {'posts': posts, 'theclass': theclass, 'pk': pk, 'discussion': discussion})
 
 @login_required
 def discussion_new(request, theclass):
