@@ -59,22 +59,22 @@ def classpage(request, theclass):
 	try: 
 		if student_in_class(request.user, theclass, Student, TheClass):
 			myclass = TheClass.objects.get(pk = theclass)
-			posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
-			assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+			posts = Post.objects.filter(theclass = theclass).order_by('-created_date')[:5]
+			assignments = Assignment.objects.filter(theclass = theclass).order_by('due_date')[:5]
 			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
 			return render(request, 'classapp/classpage.html', {'theclass': myclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
 	except:
 	 	if teacher_in_class(request.user, theclass, Teacher, TheClass):
 	 		myclass = TheClass.objects.get(pk=theclass)
-	 		posts = Post.objects.filter(theclass = theclass).order_by('-published_date')[:5]
-			assignments = Assignment.objects.filter(theclass = theclass).order_by('-due_date')[:5]
+	 		posts = Post.objects.filter(theclass = theclass).order_by('-created_date')[:5]
+			assignments = Assignment.objects.filter(theclass = theclass).order_by('due_date')[:5]
 			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
 			return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
 	return redirect('classapp.views.class_list')
 
 @login_required
 def post_list(request, theclass):
-	posts = Post.objects.filter(theclass = theclass)
+	posts = Post.objects.filter(theclass = theclass).order_by('-created_date')
 	classname = TheClass.objects.get(pk = theclass)
 	return render(request, 'classapp/post_list.html', {'posts': posts, 'theclass': theclass, 'classname': classname})
 
@@ -86,7 +86,7 @@ def postpage(request, pk, theclass):
 @login_required
 def assignment_list(request, theclass):
 	classname = TheClass.objects.get(pk = theclass)
-	assignments = Assignment.objects.filter(theclass = theclass)
+	assignments = Assignment.objects.filter(theclass = theclass).order_by('due_date')
 	return render(request, 'classapp/assignment_list.html', {'assignments': assignments, 'theclass': theclass, 'classname': classname})
 
 @login_required
@@ -166,7 +166,7 @@ def assignment_delete(request, pk, theclass):
 @login_required
 def discussion_list(request, theclass):
 	classname = TheClass.objects.get(pk = theclass)
-	discussions = Discussion.objects.filter(theclass = theclass).order_by('created_date')
+	discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')
 	return render(request, 'classapp/discussion_list.html', {'discussions': discussions, 'theclass': theclass, 'classname': classname})
 
 @login_required
