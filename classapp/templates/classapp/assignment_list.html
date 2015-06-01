@@ -9,7 +9,7 @@
 {% endif %}
 <ul class="list-unstyled nav">
 {% for assignment in assignments %}
-	<li><a href="{% url 'assignmentpage' theclass assignment.pk %}">{{assignment}}</a></li>
+	<li><a href="{% url 'assignmentpage' theclass assignment.pk %}">{{assignment}}<div class="date">Due: {{assignment.due_date}}</div></a></li>
 
 {% endfor %}
 </ul>

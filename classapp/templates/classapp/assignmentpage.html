@@ -6,13 +6,13 @@
 {% if perms.classapp.change_assignment %}
 <div class="editthing">
 	<i class="glyphicon glyphicon-edit"></i>
-<a class="edit" href="{% url 'assignment_edit' assignment.pk theclass %}">Edit</a>
+<a class="edit" href="{% url 'assignment_edit' theclass assignment.pk  %}">Edit</a>
 </div>
 {% endif %}
 {% if perms.classapp.delete_assignment %}
 <div class="deletething">
 	<i class="glyphicon glyphicon-trash"></i>
-<a class="delete" href="{% url 'assignment_delete' assignment.pk theclass %}">Delete</a>
+<a class="delete" href="{% url 'assignment_delete' theclass assignment.pk %}">Delete</a>
 </div>
 {% endif %}
 <div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if perms.classapp.change_post %}
-	<h1>New post</h1>
+	<h1>Post</h1>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{form.as_p}}
 	<button type="submit" class="subbutton">Save</button>

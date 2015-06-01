@@ -23,7 +23,7 @@
 {% for assignment in assignments %}
 <div>
 	<ul class="list-unstyled">
-	<li><a href="{% url 'assignmentpage' theclass.pk assignment.id %}">{{assignment}}</a></li>
+	<li><a href="{% url 'assignmentpage' theclass.pk assignment.id %}">{{assignment}}<div class="date">Due: {{assignment.due_date}}</div></a></li>
 </ul>
 </div>
 {% endfor %}
