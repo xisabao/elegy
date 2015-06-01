@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
+from django.forms import HiddenInput
 from django.contrib.auth.models import User
 from .models import Post, Assignment, Student, Teacher, StudentToClass, TeacherToClass, Discussion, DiscussionPosts
 
@@ -35,17 +36,14 @@ class UserForm(forms.ModelForm):
 
 
 class StudentForm(forms.ModelForm):
+	theclass = forms.CharField(widget = HiddenInput(), required=False)
 	class Meta:
 		model = Student
 		fields = ('theclass',)
-		widgets = {
-			'theclass': forms.CheckboxSelectMultiple(),
-		}
+
 
 class TeacherForm(forms.ModelForm):
+	theclass = forms.CharField(widget = HiddenInput(), required=False)
 	class Meta:
 		model = Teacher
 		fields = ('theclass',)
-		widgets = {
-		'theclass': forms.CheckboxSelectMultiple(),
-		}
