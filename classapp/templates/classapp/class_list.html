@@ -3,7 +3,7 @@
 <h2>My Classes</h2>
 <ul class="nav list-unstyled">
 {% for aclass in classes %}
-		<li><a href="{% url 'classpage' aclass.id %}">{{aclass.classname}}</a></li>
+		<li><a href="{% url 'classpage' aclass.pk %}">{{aclass.classname}}</a></li>
 
 {% endfor %}
 </ul>

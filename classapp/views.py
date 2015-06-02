@@ -59,17 +59,19 @@ def classpage(request, theclass):
 	try: 
 		if student_in_class(request.user, theclass, Student, TheClass):
 			myclass = TheClass.objects.get(pk = theclass)
+			classname = myclass.classname
 			posts = Post.objects.filter(theclass = theclass).order_by('-created_date')[:5]
 			assignments = Assignment.objects.filter(theclass = theclass).order_by('due_date')[:5]
 			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
-			return render(request, 'classapp/classpage.html', {'theclass': myclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
+			return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions, 'classname': classname})
 	except:
 	 	if teacher_in_class(request.user, theclass, Teacher, TheClass):
 	 		myclass = TheClass.objects.get(pk=theclass)
+	 		classname = myclass.classname
 	 		posts = Post.objects.filter(theclass = theclass).order_by('-created_date')[:5]
 			assignments = Assignment.objects.filter(theclass = theclass).order_by('due_date')[:5]
 			discussions = Discussion.objects.filter(theclass = theclass).order_by('-created_date')[:5]
-			return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions})
+			return render(request, 'classapp/classpage.html', {'theclass': theclass, 'posts': posts, 'assignments': assignments, 'discussions': discussions, 'classname': classname})
 	return redirect('classapp.views.class_list')
 
 @login_required

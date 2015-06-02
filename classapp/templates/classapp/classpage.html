@@ -1,17 +1,17 @@
 {% extends 'classapp/base.html' %}
 {% block content %}
 <div class="jumbotron">
-<h1>{{ theclass}}</h1>
+<h1>{{ classname}}</h1>
 
 	</div>
 <div class = "row">
 <div class="col-md-4" id="posts">
 	<i class="glyphicon glyphicon-info-sign"></i>
-<a href="{% url 'post_list' theclass.pk %}"><h2>Posts</h2></a>
+<a href="{% url 'post_list' theclass %}"><h2>Posts</h2></a>
 {% for post in posts %}
 <div>
 	<ul class="list-unstyled">
-	<li><a href="{% url 'postpage' theclass.pk post.id %}">{{post}}</a></li>
+	<li><a href="{% url 'postpage' theclass post.id %}">{{post}}</a></li>
 	</ul>
 </div>
 {% endfor %}
@@ -19,11 +19,11 @@
 
 <div class="col-md-4" id="assignments">
 	<i class="glyphicon glyphicon-list-alt"></i>
-<a href="{% url 'assignment_list' theclass.pk %}"><h2>Assignments</h2></a>
+<a href="{% url 'assignment_list' theclass %}"><h2>Assignments</h2></a>
 {% for assignment in assignments %}
 <div>
 	<ul class="list-unstyled">
-	<li><a href="{% url 'assignmentpage' theclass.pk assignment.id %}">{{assignment}}<div class="date">Due: {{assignment.due_date}}</div></a></li>
+	<li><a href="{% url 'assignmentpage' theclass assignment.id %}">{{assignment}}<div class="date">Due: {{assignment.due_date}}</div></a></li>
 </ul>
 </div>
 {% endfor %}
@@ -31,11 +31,11 @@
 
 <div class = "col-md-4" id="discussions">
 	<i class="glyphicon glyphicon-comment"></i>
-<a href="{% url 'discussion_list' theclass.pk%}"><h2>Discussions</h2></a>
+<a href="{% url 'discussion_list' theclass%}"><h2>Discussions</h2></a>
 {% for discussion in discussions %}
 <div>
 	<ul class="list-unstyled">
-		<li><a href="{% url 'discussionpage' theclass.pk discussion.pk %}">{{discussion}}</a></li>
+		<li><a href="{% url 'discussionpage' theclass discussion.pk %}">{{discussion}}</a></li>
 	</ul>
 </div>
 {% endfor %}
